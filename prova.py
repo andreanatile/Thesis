@@ -3,6 +3,7 @@ import numpy as np
 from scipy import signal
 import matplotlib.pyplot as plt
 from speed_dependency import Speed_Dependency,filtered_signal
+from featrures_extraction import features_extraction
 
 Sacc=pd.read_csv("data/smalldrive/Accelerometer.csv")
 print(Sacc.head())
@@ -36,3 +37,7 @@ plt.legend()
 plt.title('Comparison of Unfiltered dyacc and Filtered Data')
 plt.grid(True)
 plt.show()
+
+
+features=features_extraction(Sacc,1000,0.66)
+print(features.head())
