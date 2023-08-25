@@ -40,23 +40,23 @@ plt.tight_layout()
 plt.show()
 print(max_amplitude_frequency)
 
-#---------------------calculate the Fourier Trasform of y-axis Gyroscopo-----------
+#---------------------calculate the Fourier Trasform of x-axis Gyroscopo-----------
 
-fft_result_Gyr_y = np.fft.fft(data_Gyr["Gyroscope y (rad/s)"])
+fft_result_Gyr_x = np.fft.fft(data_Gyr["Gyroscope x (rad/s)"])
 
 # Plot the original signal and its Fourier Transform
 plt.figure(figsize=(10, 6))
 
 # Plot the original signal (optional)
 plt.subplot(2, 1, 1)
-plt.plot(data_Gyr['Time (s)'],data_Gyr["Gyroscope y (rad/s)"])
+plt.plot(data_Gyr['Time (s)'],data_Gyr["Gyroscope x (rad/s)"])
 plt.title('Original Signal')
 plt.xlabel('Time')
 plt.ylabel('Amplitude')
 
 # Plot the Fourier Transform
 plt.subplot(2, 1, 2)
-plt.plot(frequencies, np.abs(fft_result_Gyr_y))
+plt.plot(frequencies, np.abs(fft_result_Gyr_x))
 plt.title('Fourier Transform of y-axis Gyroscope')
 plt.xlabel('Frequency (Hz)')
 plt.ylabel('Amplitude')
