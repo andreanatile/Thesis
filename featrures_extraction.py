@@ -98,3 +98,43 @@ def SWT_Sym5_Level4(segment):
 
     # Extract approximation and detail coefficients from the result
     approx_coeffs, detail_coeffs = zip(*coeffs)
+
+def Absolute_Mean_WV(approx_coeffs,detail_coeffs):
+    approx_abs_mean=[]
+    detail_abs_mean=[]
+    for i in range(len(approx_coeffs)):
+        approx_abs_mean.append(np.mean(np.abs(approx_coeffs[i])))
+        detail_abs_mean.append(np.mean(np.abs(detail_coeffs[i])))
+    a1_abs_mean,a2_abs_mean,a3_abs_mean=approx_abs_mean
+    d1_abs_mean,d2_abs_mean,d3_abs_mean=detail_abs_mean
+    return a1_abs_mean,a2_abs_mean,a3_abs_mean,d1_abs_mean,d2_abs_mean,d3_abs_mean
+
+def Std_WV(approx_coeffs,detail_coeffs):
+    approx_std=[]
+    detail_std=[]
+    for i in range(len(approx_coeffs)):
+        approx_std.append(np.std(approx_coeffs[i]))
+        detail_std.append(np.std(detail_coeffs[i]))
+    a1_std,a2_std,a3_std=approx_std
+    d1_std,d2_std,d3_std=detail_std
+    return a1_std,a2_std,a3_std,d1_std,d2_std,d3_std
+
+def Var_WV(approx_coeffs,detail_coeffs):
+    approx_var=[]
+    detail_var=[]
+    for i in range(len(approx_coeffs)):
+        approx_var.append(np.var(approx_coeffs[i]))
+        detail_var.append(np.var(detail_coeffs[i]))
+    a1_var,a2_var,a3_var=approx_var
+    d1_var,d2_var,d3_var=detail_var
+    return a1_var,a2_var,a3_var,d1_var,d2_var,d3_var
+
+def Energy_WV(approx_coeffs,detail_coeffs):
+    approx_energy=[]
+    detail_energy=[]
+    for i in range(len(approx_coeffs)):
+        approx_energy.append(np.sum(approx_coeffs[i]**2))
+        detail_energy.append(np.sum(detail_coeffs[i]**2))
+    a1_energy,a2_energy,a3_energy=approx_energy
+    d1_energy,d2_energy,d3_energy=detail_energy
+    return a1_energy,a2_energy,a3_energy,d1_energy,d2_energy,d3_energy

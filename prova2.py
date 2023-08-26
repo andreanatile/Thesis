@@ -21,4 +21,4 @@ coeffs = pywt.swt(accel_data, wavelet, level=level)
 # Extract approximation and detail coefficients from the result
 approx_coeffs, detail_coeffs = zip(*coeffs)
 
-print(type(detail_coeffs))
+print(len(approx_coeffs[3]))
