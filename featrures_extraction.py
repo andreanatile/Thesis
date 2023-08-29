@@ -53,7 +53,7 @@ def features_extraction(data,segment_length,overlap_percentage,sampling_frequenc
         mean_frequency.append(Mean_Frequency(ham_ftt,freq_axis))
         median_frequency.append(Median_Frequency(ham_ftt,freq_axis))
         #wavelet domain
-        approx_coeffs,detail_coeffs=SWT_Sym5_Level4(segments[i])
+        approx_coeffs,detail_coeffs=SWT_Sym5(segments[i],level)
         #absolute mean of approx and detail
         a_abs_mean,d_abs_mean=Absolute_Mean_WV(approx_coeffs,detail_coeffs,level)
         approx_absolute_mean_wv.append(a_abs_mean)
@@ -82,7 +82,7 @@ def features_extraction(data,segment_length,overlap_percentage,sampling_frequenc
                            'Signal magnitude area':sma,
                            'Mean frequency':mean_frequency,
                            'Median frequency':median_frequency})
-    #label_abs_mean=['a1 absolute mean','a2 absolute mean','a3 absolute mean','d1 absolute mean','d2 absolute mean','d3 absolute mean']
+      
     abs_df=Create_WV_Datasets(approx_absolute_mean_wv,detail_absolute_mean_wv,['a1 absolute mean','a2 absolute mean','a3 absolute mean',
                                                                                'd1 absolute mean','d2 absolute mean','d3 absolute mean'])
     std_df=Create_WV_Datasets(approx_std_wv,detail_std_wv,['a1 std','a2 std','a3 std',
@@ -91,7 +91,7 @@ def features_extraction(data,segment_length,overlap_percentage,sampling_frequenc
                                                            'd1 var','d2 var','d3 var'])
     energy_df=Create_WV_Datasets(approx_energy_wv,detail_energy_wv,['a1 energy','a2 energy','a3 energy',
                                                            'd1 energy','d2 energy','d3 energy'])
-    features=pd.concat([features,abs_df,std_df,var_df,energy_df])
+    features=pd.concat([features,abs_df,std_df,var_df,energy_df],axis=1)
     return features
 
 def Hamming_Window_FFT(segment,sampling_frequency):
@@ -122,10 +122,8 @@ def Median_Frequency(ham_ftt,freq_axis):
     median_frequency = freq_axis[median_frequency_index]
     return median_frequency
 
-def SWT_Sym5_Level4(segment):
+def SWT_Sym5(segment,level):
     wavelet = 'sym5'
-    level = 3
-
     # Perform stationary wavelet transform
     coeffs = pywt.swt(segment, wavelet, level=level)
 
@@ -172,13 +170,6 @@ def Energy_WV(approx_coeffs,detail_coeffs):
 def Create_WV_Datasets(a,d,label):
     data1=pd.DataFrame(a,columns=label[:3])
     data2=pd.DataFrame(d,columns=label[3:])
-    data=pd.concat([data1,data2])
+    data=pd.concat([data1,data2],axis=1)
     return data
 
-def Wave_length(segment):
-    segment_length = len(segment)
-    if segment_length > 1:
-        segment_waveform_length = sum(abs(segment[j] - segment[j-1]) for j in range(1, segment_length))
-    else:
-        segment_waveform_length=0
-    return segment_waveform_length
