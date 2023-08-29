@@ -4,7 +4,7 @@ from scipy import signal
 import matplotlib.pyplot as plt
 import pywt
 
-def features_extraction(data,segment_length,overlap_percentage,sampling_frequency):
+def features_extraction(data,segment_length,overlap_percentage,sampling_frequency,level):
     overlap_length = int(segment_length * overlap_percentage)  # Length of the overlap
     # Initialize an empty list to store the segments
     segments = []
@@ -40,38 +40,38 @@ def features_extraction(data,segment_length,overlap_percentage,sampling_frequenc
     detail_energy_wv=np.zeros(num_segments)
 
     for i in range(0,len(segments)):
-        N_segment.append(i)
-        Mean.append(segments[i].mean())
-        Std.append(segments[i].std())
-        Var.append(segments[i].var())
-        Ptp.append(segments[i].ptp())
-        Rms.append(np.sqrt(np.mean(segments[i]**2)))
-        Zcr.append(np.sum(np.diff(np.sign(segments[i])) != 0) / (2 * len(segments[i])))
-        Mean_Abs.append(np.abs(segments[i]).mean())
-        waveform_length.append(sum(abs(segments[i][j] - segments[i][j-1]) for j in range(1, len(segment[i]))))
-        sma.append(np.sum(abs(segments[i]))) #not sure of abs or not, wikipedia say not
+        N_segment[i]=i
+        Mean[i] = np.mean(segments[i])
+        Std[i] = np.std(segments[i])
+        Var[i] = np.var(segments[i])
+        Ptp[i] = np.ptp(segments[i])
+        Rms[i] = np.sqrt(np.mean(segments[i]**2))
+        Zcr[i] = np.sum(np.diff(np.sign(segments[i])) != 0) / (2 * len(segments[i]))
+        Mean_Abs[i] = np.mean(np.abs(segments[i]))
+        waveform_length[i] = np.sum(np.abs(np.diff(segments[i])))
+        sma[i] = np.sum(np.abs(segments[i])) #not sure of abs or not, wikipedia say not
         #frequency domain
         ham_ftt,freq_axis=Hamming_Window_FFT(segments[i],sampling_frequency)
-        mean_frequency.append(Mean_Frequency(ham_ftt,freq_axis))
-        median_frequency.append(Median_Frequency(ham_ftt,freq_axis))
+        mean_frequency[i]=Mean_Frequency(ham_ftt,freq_axis)
+        median_frequency[i]=Median_Frequency(ham_ftt,freq_axis)
         #wavelet domain
         approx_coeffs,detail_coeffs=SWT_Sym5_Level4(segments[i])
         #absolute mean of approx and detail
-        a_abs_mean,d_abs_mean=Absolute_Mean_WV(approx_coeffs,detail_coeffs)
-        approx_absolute_mean_wv.append(a_abs_mean)
-        detail_absolute_mean_wv.append(d_abs_mean)
+        a_abs_mean,d_abs_mean=Absolute_Mean_WV(approx_coeffs,detail_coeffs,level)
+        approx_absolute_mean_wv[i]=a_abs_mean
+        detail_absolute_mean_wv[i]=d_abs_mean
         #standard deviation of approx and detail
         a_std,d_std=Std_WV(approx_coeffs,detail_coeffs)
-        approx_std_wv.append(a_std)
-        detail_std_wv.append(d_std)
+        approx_std_wv[i]=a_std
+        detail_std_wv[i]=d_std
         #variance 
         a_var,d_var=Var_WV(approx_coeffs,detail_coeffs)
-        approx_var_wv.append(a_var)
-        detail_var_wv.append(d_var)
+        approx_var_wv[i]=a_var
+        detail_var_wv[i]=d_var
         #energy of every layer
         a_en,d_en=Energy_WV(approx_coeffs,detail_coeffs)
-        approx_energy_wv.append(a_en)
-        detail_energy_wv.append(d_en)
+        approx_energy_wv[i]=a_en
+        detail_energy_wv[i]=d_en
 
     features=pd.DataFrame({'N_segment': N_segment,
                            'Mean':Mean,
@@ -127,7 +127,7 @@ def Median_Frequency(ham_ftt,freq_axis):
 
 def SWT_Sym5_Level4(segment):
     wavelet = 'sym5'
-    level = 4
+    level = 3
 
     # Perform stationary wavelet transform
     coeffs = pywt.swt(segment, wavelet, level=level)
@@ -136,12 +136,12 @@ def SWT_Sym5_Level4(segment):
     approx_coeffs, detail_coeffs = zip(*coeffs)
     return approx_coeffs,detail_coeffs
 
-def Absolute_Mean_WV(approx_coeffs,detail_coeffs):
-    approx_abs_mean=[]
-    detail_abs_mean=[]
+def Absolute_Mean_WV(approx_coeffs,detail_coeffs,level):
+    approx_abs_mean=np.zeros(level)
+    detail_abs_mean=np.zeros(level)
     for i in range(len(approx_coeffs)):
-        approx_abs_mean.append(np.mean(np.abs(approx_coeffs[i])))
-        detail_abs_mean.append(np.mean(np.abs(detail_coeffs[i])))
+        approx_abs_mean[i]=np.mean(np.abs(approx_coeffs[i]))
+        detail_abs_mean[i]=np.mean(np.abs(detail_coeffs[i]))
     
     return approx_abs_mean,detail_abs_mean
 

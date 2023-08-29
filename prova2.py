@@ -8,17 +8,4 @@ import pywt
 
 Sacc=pd.read_csv("data/smalldrive/Accelerometer.csv")
 
-# Example accelerometer data (replace with your data)
-accel_data = Sacc['Acceleration y (m/s^2)'].iloc[:1000]
-
-# Define wavelet and decomposition level
-wavelet = 'sym5'
-level = 3
-
-# Perform stationary wavelet transform
-coeffs = pywt.swt(accel_data, wavelet, level=level)
-
-# Extract approximation and detail coefficients from the result
-approx_coeffs, detail_coeffs = zip(*coeffs)
-
-print(len(approx_coeffs[3]))
+features=features_extraction(Sacc['Acceleration y (m/s^2)'],1000,0.66,400,3)
