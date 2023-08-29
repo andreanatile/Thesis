@@ -18,60 +18,58 @@ def features_extraction(data,segment_length,overlap_percentage,sampling_frequenc
     # Create a DataFrame from the segments, using np array for efficency
     num_segments=len(segments)
     #time domain features
-    N_segment = np.arange(num_segments)
-    Mean = np.zeros(num_segments)
-    Std = np.zeros(num_segments)
-    Var = np.zeros(num_segments)
-    Ptp = np.zeros(num_segments)
-    Rms = np.zeros(num_segments)
-    Zcr = np.zeros(num_segments)
-    Mean_Abs = np.zeros(num_segments)
-    waveform_length = np.zeros(num_segments)
-    sma = np.zeros(num_segments)
-    mean_frequency = np.zeros(num_segments)
-    median_frequency = np.zeros(num_segments)
-    approx_absolute_mean_wv=np.zeros(num_segments)
-    detail_absolute_mean_wv=np.zeros(num_segments)
-    approx_std_wv=np.zeros(num_segments)
-    detail_std_wv=np.zeros(num_segments)
-    approx_var_wv=np.zeros(num_segments)
-    detail_var_wv=np.zeros(num_segments)
-    approx_energy_wv=np.zeros(num_segments)
-    detail_energy_wv=np.zeros(num_segments)
+    N_segment=[]
+    Mean=[]
+    Std=[]
+    Var=[]
+    Ptp=[]
+    Rms=[]
+    Zcr=[]
+    Mean_Abs=[]
+    sma=[]
+    mean_frequency=[]
+    median_frequency=[]
+    approx_absolute_mean_wv=[]
+    detail_absolute_mean_wv=[]
+    approx_std_wv=[]
+    detail_std_wv=[]
+    approx_var_wv=[]
+    detail_var_wv=[]
+    approx_energy_wv=[]
+    detail_energy_wv=[]
 
     for i in range(0,len(segments)):
-        N_segment[i]=i
-        Mean[i] = np.mean(segments[i])
-        Std[i] = np.std(segments[i])
-        Var[i] = np.var(segments[i])
-        Ptp[i] = np.ptp(segments[i])
-        Rms[i] = np.sqrt(np.mean(segments[i]**2))
-        Zcr[i] = np.sum(np.diff(np.sign(segments[i])) != 0) / (2 * len(segments[i]))
-        Mean_Abs[i] = np.mean(np.abs(segments[i]))
-        waveform_length[i] = np.sum(np.abs(np.diff(segments[i])))
-        sma[i] = np.sum(np.abs(segments[i])) #not sure of abs or not, wikipedia say not
+        N_segment.append(i)
+        Mean.append(segments[i].mean())
+        Std.append(segments[i].std())
+        Var.append(segments[i].var())
+        Ptp.append(np.ptp(segments[i]))
+        Rms.append(np.sqrt(np.mean(segments[i]**2)))
+        Zcr.append(np.sum(np.diff(np.sign(segments[i])) != 0) / (2 * len(segments[i])))
+        Mean_Abs.append(np.abs(segments[i]).mean())
+        sma.append(np.sum(abs(segments[i]))) #not sure of abs or not, wikipedia say not
         #frequency domain
         ham_ftt,freq_axis=Hamming_Window_FFT(segments[i],sampling_frequency)
-        mean_frequency[i]=Mean_Frequency(ham_ftt,freq_axis)
-        median_frequency[i]=Median_Frequency(ham_ftt,freq_axis)
+        mean_frequency.append(Mean_Frequency(ham_ftt,freq_axis))
+        median_frequency.append(Median_Frequency(ham_ftt,freq_axis))
         #wavelet domain
         approx_coeffs,detail_coeffs=SWT_Sym5_Level4(segments[i])
         #absolute mean of approx and detail
         a_abs_mean,d_abs_mean=Absolute_Mean_WV(approx_coeffs,detail_coeffs,level)
-        approx_absolute_mean_wv[i]=a_abs_mean
-        detail_absolute_mean_wv[i]=d_abs_mean
+        approx_absolute_mean_wv.append(a_abs_mean)
+        detail_absolute_mean_wv.append(d_abs_mean)
         #standard deviation of approx and detail
         a_std,d_std=Std_WV(approx_coeffs,detail_coeffs)
-        approx_std_wv[i]=a_std
-        detail_std_wv[i]=d_std
+        approx_std_wv.append(a_std)
+        detail_std_wv.append(d_std)
         #variance 
         a_var,d_var=Var_WV(approx_coeffs,detail_coeffs)
-        approx_var_wv[i]=a_var
-        detail_var_wv[i]=d_var
+        approx_var_wv.append(a_var)
+        detail_var_wv.append(d_var)
         #energy of every layer
         a_en,d_en=Energy_WV(approx_coeffs,detail_coeffs)
-        approx_energy_wv[i]=a_en
-        detail_energy_wv[i]=d_en
+        approx_energy_wv.append(a_en)
+        detail_energy_wv.append(d_en)
 
     features=pd.DataFrame({'N_segment': N_segment,
                            'Mean':Mean,
@@ -81,7 +79,6 @@ def features_extraction(data,segment_length,overlap_percentage,sampling_frequenc
                            'Root mean square':Rms,
                            'Zero crossing rate':Zcr,
                            'Mean absolute':Mean_Abs,
-                           'waveform length':waveform_length,
                            'Signal magnitude area':sma,
                            'Mean frequency':mean_frequency,
                            'Median frequency':median_frequency})
@@ -177,3 +174,11 @@ def Create_WV_Datasets(a,d,label):
     data2=pd.DataFrame(d,columns=label[3:])
     data=pd.concat([data1,data2])
     return data
+
+def Wave_length(segment):
+    segment_length = len(segment)
+    if segment_length > 1:
+        segment_waveform_length = sum(abs(segment[j] - segment[j-1]) for j in range(1, segment_length))
+    else:
+        segment_waveform_length=0
+    return segment_waveform_length
