@@ -15,30 +15,29 @@ def features_extraction(data,segment_length,overlap_percentage,sampling_frequenc
         segment = data[i:i+segment_length]
         segments.append(segment)
 
-    # Create a DataFrame from the segments
-    #segment_df = pd.DataFrame(segments)
-    
+    # Create a DataFrame from the segments, using np array for efficency
+    num_segments=len(segments)
     #time domain features
-    N_segment=[]
-    Mean=[]
-    Std=[]
-    Var=[]
-    Ptp=[]
-    Rms=[]
-    Zcr=[]
-    Mean_Abs=[]
-    waveform_length=[]
-    sma=[]
-    mean_frequency=[]
-    median_frequency=[]
-    approx_absolute_mean_wv=[]
-    detail_absolute_mean_wv=[]
-    approx_std_wv=[]
-    detail_std_wv=[]
-    approx_var_wv=[]
-    detail_var_wv=[]
-    approx_energy_wv=[]
-    detail_energy_wv=[]
+    N_segment = np.arange(num_segments)
+    Mean = np.zeros(num_segments)
+    Std = np.zeros(num_segments)
+    Var = np.zeros(num_segments)
+    Ptp = np.zeros(num_segments)
+    Rms = np.zeros(num_segments)
+    Zcr = np.zeros(num_segments)
+    Mean_Abs = np.zeros(num_segments)
+    waveform_length = np.zeros(num_segments)
+    sma = np.zeros(num_segments)
+    mean_frequency = np.zeros(num_segments)
+    median_frequency = np.zeros(num_segments)
+    approx_absolute_mean_wv=np.zeros(num_segments)
+    detail_absolute_mean_wv=np.zeros(num_segments)
+    approx_std_wv=np.zeros(num_segments)
+    detail_std_wv=np.zeros(num_segments)
+    approx_var_wv=np.zeros(num_segments)
+    detail_var_wv=np.zeros(num_segments)
+    approx_energy_wv=np.zeros(num_segments)
+    detail_energy_wv=np.zeros(num_segments)
 
     for i in range(0,len(segments)):
         N_segment.append(i)
@@ -86,9 +85,16 @@ def features_extraction(data,segment_length,overlap_percentage,sampling_frequenc
                            'Signal magnitude area':sma,
                            'Mean frequency':mean_frequency,
                            'Median frequency':median_frequency})
-    label_abs_mean=['a1 absolute mean','a2 absolute mean','a3 absolute mean','d1 absolute mean','d2 absolute mean','d3 absolute mean']
-    a_abs_df=pd.DataFrame(approx_absolute_mean_wv,columns=label_abs_mean[:3])
-
+    #label_abs_mean=['a1 absolute mean','a2 absolute mean','a3 absolute mean','d1 absolute mean','d2 absolute mean','d3 absolute mean']
+    abs_df=Create_WV_Datasets(approx_absolute_mean_wv,detail_absolute_mean_wv,['a1 absolute mean','a2 absolute mean','a3 absolute mean',
+                                                                               'd1 absolute mean','d2 absolute mean','d3 absolute mean'])
+    std_df=Create_WV_Datasets(approx_std_wv,detail_std_wv,['a1 std','a2 std','a3 std',
+                                                           'd1 std','d2 std','d3 std'])
+    var_df=Create_WV_Datasets(approx_var_wv,detail_var_wv,['a1 var','a2 var','a3 var',
+                                                           'd1 var','d2 var','d3 var'])
+    energy_df=Create_WV_Datasets(approx_energy_wv,detail_energy_wv,['a1 energy','a2 energy','a3 energy',
+                                                           'd1 energy','d2 energy','d3 energy'])
+    features=pd.concat([features,abs_df,std_df,var_df,energy_df])
     return features
 
 def Hamming_Window_FFT(segment,sampling_frequency):
@@ -147,6 +153,7 @@ def Std_WV(approx_coeffs,detail_coeffs):
         detail_std.append(np.std(detail_coeffs[i]))
     
     return approx_std,detail_std
+
 def Var_WV(approx_coeffs,detail_coeffs):
     approx_var=[]
     detail_var=[]
@@ -164,3 +171,9 @@ def Energy_WV(approx_coeffs,detail_coeffs):
         detail_energy.append(np.sum(detail_coeffs[i]**2))
     
     return approx_energy,detail_energy
+
+def Create_WV_Datasets(a,d,label):
+    data1=pd.DataFrame(a,columns=label[:3])
+    data2=pd.DataFrame(d,columns=label[3:])
+    data=pd.concat([data1,data2])
+    return data
