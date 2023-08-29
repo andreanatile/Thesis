@@ -173,3 +173,14 @@ def Create_WV_Datasets(a,d,label):
     data=pd.concat([data1,data2],axis=1)
     return data
 
+def All_Features(data1,data2,data3,segment_length,overlap_percentage,sampling_frequency,level,suffix):
+    data1_f=features_extraction(data1,segment_length,overlap_percentage,sampling_frequency,level)
+    data2_f=features_extraction(data2,segment_length,overlap_percentage,sampling_frequency,level)
+    data3_f=features_extraction(data3,segment_length,overlap_percentage,sampling_frequency,level)
+
+    data1_f.columns=data1_f.columns + " " + suffix[0]
+    data2_f.columns=data2_f.columns + " " + suffix[1]
+    data3_f.columns=data1_f.columns + " " + suffix[2]
+
+    all_features=pd.concat([data1,data2_f,data3_f],axis=1)
+    return all_features
