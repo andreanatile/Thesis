@@ -21,17 +21,17 @@ max_amplitude_frequency=frequencies[index]
 # Plot the original signal and its Fourier Transform
 plt.figure(figsize=(10, 6))
 
-# Plot the original signal (optional)
+# Plot the original signal 
 plt.subplot(2, 1, 1)
 plt.plot(data_Gyr['Time (s)'],data_Gyr["Gyroscope z (rad/s)"])
-plt.title('Original Signal')
+plt.title('Original Signal of Z-axis Gyroscope')
 plt.xlabel('Time')
 plt.ylabel('Amplitude')
 
 # Plot the Fourier Transform
 plt.subplot(2, 1, 2)
 plt.plot(frequencies, np.abs(fft_result_Gyr_z))
-plt.title('Fourier Transform of z-axis Gyroscope')
+plt.title('Fourier Transform of Z-axis Gyroscope')
 plt.xlabel('Frequency (Hz)')
 plt.ylabel('Amplitude')
 plt.xlim(0, sampling_rate / 2)  # Display only positive frequencies
@@ -50,14 +50,14 @@ plt.figure(figsize=(10, 6))
 # Plot the original signal (optional)
 plt.subplot(2, 1, 1)
 plt.plot(data_Gyr['Time (s)'],data_Gyr["Gyroscope x (rad/s)"])
-plt.title('Original Signal')
+plt.title('Original Signal of X-axis Gyroscope')
 plt.xlabel('Time')
 plt.ylabel('Amplitude')
 
 # Plot the Fourier Transform
 plt.subplot(2, 1, 2)
 plt.plot(frequencies, np.abs(fft_result_Gyr_x))
-plt.title('Fourier Transform of y-axis Gyroscope')
+plt.title('Fourier Transform of X-axis Gyroscope')
 plt.xlabel('Frequency (Hz)')
 plt.ylabel('Amplitude')
 plt.xlim(0, sampling_rate / 2)  # Display only positive frequencies

@@ -38,7 +38,7 @@ plt.plot(frequencies, np.abs(fft_result))
 plt.title('Fourier Transform of Acceleration y (m/s^2)')
 plt.xlabel('Frequency (Hz)')
 plt.ylabel('Amplitude')
-plt.xlim(0, sampling_rate / 2)  # Display only positive frequencies
+plt.xlim(0, sampling_rate / 2)  
 plt.tight_layout()
 
 plt.show()
