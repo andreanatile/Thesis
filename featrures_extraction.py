@@ -15,10 +15,9 @@ def features_extraction(data,segment_length,overlap_percentage,sampling_frequenc
         segment = data[i:i+segment_length]
         segments.append(segment)
 
-    # Create a DataFrame from the segments, using np array for efficency
-    num_segments=len(segments)
+    
+ 
     #time domain features
-    N_segment=[]
     Mean=[]
     Std=[]
     Var=[]
@@ -39,7 +38,6 @@ def features_extraction(data,segment_length,overlap_percentage,sampling_frequenc
     detail_energy_wv=[]
 
     for i in range(0,len(segments)):
-        N_segment.append(i)
         Mean.append(segments[i].mean())
         Std.append(segments[i].std())
         Var.append(segments[i].var())
@@ -71,8 +69,7 @@ def features_extraction(data,segment_length,overlap_percentage,sampling_frequenc
         approx_energy_wv.append(a_en)
         detail_energy_wv.append(d_en)
 
-    features=pd.DataFrame({'N_segment': N_segment,
-                           'Mean':Mean,
+    features=pd.DataFrame({'Mean':Mean,
                            'Standard deviation':Std,
                            'Variance':Var,
                            'Peak to peak':Ptp,
@@ -180,7 +177,7 @@ def All_Features(data1,data2,data3,segment_length,overlap_percentage,sampling_fr
 
     data1_f.columns=data1_f.columns + " " + suffix[0]
     data2_f.columns=data2_f.columns + " " + suffix[1]
-    data3_f.columns=data1_f.columns + " " + suffix[2]
+    data3_f.columns=data3_f.columns + " " + suffix[2]
 
     all_features=pd.concat([data1,data2_f,data3_f],axis=1)
     return all_features

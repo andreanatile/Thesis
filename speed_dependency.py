@@ -19,10 +19,11 @@ def Speed_Dependency(cutoff_frequency,sampling_frequency,order,S,Yacc):
 
     filtered_Yacc=filtered_signal(Yacc,30,400,4)
     filtered_Yacc_series_ = pd.Series(filtered_Yacc)
+    # Calculate H ° S(t) and E ° |H| ° Yacc(t)
     E=np.abs(filtered_Yacc_series_).rolling(window=rolling_window_size, min_periods=1, center=False).mean()
-    # Calculate H ° S(t) and E ° |H| ° Xacc(t)
+    
     H_composed =filtered_S_signal   # H ° S(t)
-    E_composed = E  # E ° |H| ° Xacc(t)
+    E_composed = E  # E ° |H| ° Yacc(t)
 
     dS= H_composed / E_composed
     return dS
