@@ -179,5 +179,5 @@ def All_Features(data1,data2,data3,segment_length,overlap_percentage,sampling_fr
     data2_f.columns=data2_f.columns + " " + suffix[1]
     data3_f.columns=data3_f.columns + " " + suffix[2]
 
-    all_features=pd.concat([data1,data2_f,data3_f],axis=1)
+    all_features=pd.concat([data1_f,data2_f,data3_f],axis=1)
     return all_features
