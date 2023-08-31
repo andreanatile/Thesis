@@ -6,7 +6,7 @@ import pywt
 
 def features_extraction(data,time,segment_length,overlap_percentage,sampling_frequency,level):
     overlap_length = int(segment_length * overlap_percentage)  # Length of the overlap
-    # Initialize an empty list to store the segments
+    # Initialize empty lists to store the segments
     segments = []
     start_time_segment=[]
     end_time_segment=[]
@@ -18,8 +18,6 @@ def features_extraction(data,time,segment_length,overlap_percentage,sampling_fre
         start_time_segment.append(time[i])
         end_time_segment.append([time[i+segment_length]])
     
- 
-    #time domain features
     Mean=[]
     Std=[]
     Var=[]
