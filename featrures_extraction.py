@@ -4,17 +4,19 @@ from scipy import signal
 import matplotlib.pyplot as plt
 import pywt
 
-def features_extraction(data,segment_length,overlap_percentage,sampling_frequency,level):
+def features_extraction(data,time,segment_length,overlap_percentage,sampling_frequency,level):
     overlap_length = int(segment_length * overlap_percentage)  # Length of the overlap
     # Initialize an empty list to store the segments
     segments = []
-    #acceleration_signal=data['Acceleration y (m/s^2)']
-
-    # Create segments as before
+    start_time_segment=[]
+    end_time_segment=[]
+    
+    # Create segments of data
     for i in range(0, len(data) - segment_length + 1, segment_length - overlap_length):
         segment = data[i:i+segment_length]
         segments.append(segment)
-
+        start_time_segment.append(time[i])
+        end_time_segment.append([time[i+segment_length]])
     
  
     #time domain features
@@ -69,7 +71,9 @@ def features_extraction(data,segment_length,overlap_percentage,sampling_frequenc
         approx_energy_wv.append(a_en)
         detail_energy_wv.append(d_en)
 
-    features=pd.DataFrame({'Mean':Mean,
+    features=pd.DataFrame({'Start time segment':start_time_segment,
+                           'End time segment':end_time_segment,
+                           'Mean':Mean,
                            'Standard deviation':Std,
                            'Variance':Var,
                            'Peak to peak':Ptp,
@@ -170,10 +174,10 @@ def Create_WV_Datasets(a,d,label):
     data=pd.concat([data1,data2],axis=1)
     return data
 
-def All_Features(data1,data2,data3,segment_length,overlap_percentage,sampling_frequency,level,suffix):
-    data1_f=features_extraction(data1,segment_length,overlap_percentage,sampling_frequency,level)
-    data2_f=features_extraction(data2,segment_length,overlap_percentage,sampling_frequency,level)
-    data3_f=features_extraction(data3,segment_length,overlap_percentage,sampling_frequency,level)
+def All_Features(data1,data2,data3,time,segment_length,overlap_percentage,sampling_frequency,level,suffix):
+    data1_f=features_extraction(data1,time,segment_length,overlap_percentage,sampling_frequency,level)
+    data2_f=features_extraction(data2,time,segment_length,overlap_percentage,sampling_frequency,level)
+    data3_f=features_extraction(data3,time,segment_length,overlap_percentage,sampling_frequency,level)
 
     data1_f.columns=data1_f.columns + " " + suffix[0]
     data2_f.columns=data2_f.columns + " " + suffix[1]
