@@ -19,4 +19,4 @@ features=All_Features(upsampled_Sacc,upsampled_GyrZ,upsampled_GyrZ,upsampled_Tim
 print(len(features))
 #Even with a 400Hz of sampling frequency over 21 minutes of road measuament i can 
 # analyze data in a small period of time.
-print(features.head())
+print(features.tail())
