@@ -8,6 +8,7 @@ from featrures_extraction import features_extraction
 Sacc=pd.read_csv("data/smalldrive/Accelerometer.csv")
 location=pd.read_csv('data/smalldrive/Location.csv')
 
+
 dYacc=Speed_Dependency(30,400,4,Sacc['Acceleration y (m/s^2)'],Sacc['Acceleration y (m/s^2)'])
 filtered_y_signal=filtered_signal(Sacc['Acceleration y (m/s^2)'],30,400,4)
 # Plot the data

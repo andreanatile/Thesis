@@ -3,8 +3,9 @@ import numpy as np
 from scipy import signal
 import matplotlib.pyplot as plt
 import pywt
+from scipy.interpolate import interp1d
 
-def features_extraction(data,time,segment_length,overlap_percentage,sampling_frequency,level):
+def features_extraction(data,segment_length,overlap_percentage,sampling_frequency,level):
     overlap_length = int(segment_length * overlap_percentage)  # Length of the overlap
     # Initialize empty lists to store the segments
     segments = []
@@ -15,8 +16,7 @@ def features_extraction(data,time,segment_length,overlap_percentage,sampling_fre
     for i in range(0, len(data) - segment_length + 1, segment_length - overlap_length):
         segment = data[i:i+segment_length]
         segments.append(segment)
-        start_time_segment.append(time[i])
-        end_time_segment.append([time[i+segment_length]])
+       
     
     Mean=[]
     Std=[]
@@ -69,9 +69,7 @@ def features_extraction(data,time,segment_length,overlap_percentage,sampling_fre
         approx_energy_wv.append(a_en)
         detail_energy_wv.append(d_en)
 
-    features=pd.DataFrame({'Start time segment':start_time_segment,
-                           'End time segment':end_time_segment,
-                           'Mean':Mean,
+    features=pd.DataFrame({'Mean':Mean,
                            'Standard deviation':Std,
                            'Variance':Var,
                            'Peak to peak':Ptp,
@@ -173,13 +171,44 @@ def Create_WV_Datasets(a,d,label):
     return data
 
 def All_Features(data1,data2,data3,time,segment_length,overlap_percentage,sampling_frequency,level,suffix):
-    data1_f=features_extraction(data1,time,segment_length,overlap_percentage,sampling_frequency,level)
-    data2_f=features_extraction(data2,time,segment_length,overlap_percentage,sampling_frequency,level)
-    data3_f=features_extraction(data3,time,segment_length,overlap_percentage,sampling_frequency,level)
+    # create the times columns of each segment
+    start_time_segment=[]
+    end_time_segment=[]
+    overlap_length = int(segment_length * overlap_percentage)
+    #start is the time of the first sample of the segment, end is the time of the last sample of the segment
+    for i in range(0, len(time) - segment_length + 1, segment_length - overlap_length):
+        start_time_segment.append(time[i])
+        end_time_segment.append(time[i+segment_length])
 
+    # Create the time DataFrame
+    Time_df=pd.DataFrame({'Start Time segment (s)':start_time_segment,
+                        'End Time segment (s)':end_time_segment})
+   
+    
+    #Calculate all the feature for every axis
+    data1_f=features_extraction(data1,segment_length,overlap_percentage,sampling_frequency,level)
+    data2_f=features_extraction(data2,segment_length,overlap_percentage,sampling_frequency,level)
+    data3_f=features_extraction(data3,segment_length,overlap_percentage,sampling_frequency,level)
+
+    #Append the suffix for every feature
     data1_f.columns=data1_f.columns + " " + suffix[0]
     data2_f.columns=data2_f.columns + " " + suffix[1]
     data3_f.columns=data3_f.columns + " " + suffix[2]
 
-    all_features=pd.concat([data1_f,data2_f,data3_f],axis=1)
+    #Concat all the dataframe
+    all_features=pd.concat([Time_df,data1_f,data2_f,data3_f],axis=1)
     return all_features
+
+def UpSampling(data,original_freq,desired_freq):
+    
+    # Create a time array for the original data
+    original_time = np.arange(0, len(data)) / original_freq
+
+    # Create a time array for the upsampled data
+    desired_length = int(len(data) * (desired_freq / original_freq))
+    desired_time = np.arange(0, desired_length) / desired_freq
+
+    # Create an interpolation function and use it to upsample the data
+    interpolation_function = interp1d(original_time, data, kind='linear', fill_value='extrapolate')
+    upsampled_data = interpolation_function(desired_time)
+    return upsampled_data
