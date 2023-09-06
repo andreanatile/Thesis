@@ -15,7 +15,7 @@ upsampled_Time=UpSampling(Sacc['Time (s)'],100,400)
 upsampled_GyrX=UpSampling(Sgyr['Gyroscope x (rad/s)'],100,400)
 upsampled_GyrZ=UpSampling(Sgyr['Gyroscope z (rad/s)'],100,400)
 
-features=All_Features(upsampled_Sacc,upsampled_GyrZ,upsampled_GyrZ,upsampled_Time,1000,0.66,400,3,['Acceleration y','Gyroscope x','Gyroscope z'])
+features=All_Features(upsampled_Sacc,upsampled_GyrX,upsampled_GyrZ,upsampled_Time,1000,0.66,400,3,['Acceleration y','Gyroscope x','Gyroscope z'])
 print(len(features))
 #Even with a 400Hz of sampling frequency over 21 minutes of road measuament i can 
 # analyze data in a small period of time.
