@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import pywt
 from scipy.interpolate import interp1d
 
-def features_extraction(data,segment_length,overlap_percentage,sampling_frequency,level):
+def features_extraction(data,segment_length,overlap_percentage,sampling_rate,level):
     #Create segments
     segments=Segmentation(data,segment_length,overlap_percentage)
        
@@ -40,7 +40,7 @@ def features_extraction(data,segment_length,overlap_percentage,sampling_frequenc
         Mean_Abs.append(np.abs(segments[i]).mean())
         sma.append(np.sum(abs(segments[i]))) #not sure of abs or not, wikipedia say not
         #frequency domain
-        ham_ftt,freq_axis=Hamming_Window_FFT(segments[i],sampling_frequency)
+        ham_ftt,freq_axis=Hamming_Window_FFT(segments[i],sampling_rate)
         mean_frequency.append(Mean_Frequency(ham_ftt,freq_axis))
         median_frequency.append(Median_Frequency(ham_ftt,freq_axis))
         #wavelet domain
@@ -84,14 +84,14 @@ def features_extraction(data,segment_length,overlap_percentage,sampling_frequenc
     features=pd.concat([features,abs_df,std_df,var_df,energy_df],axis=1)
     return features
 
-def Hamming_Window_FFT(segment,sampling_frequency):
+def Hamming_Window_FFT(segment,sampling_rate):
     ham=np.hamming(len(segment))
     segment_ham=segment*ham
     # Calculate FFT of the Hamming windowed signal
     ham_fft = np.abs(np.fft.fft(segment_ham))
     ham_fft = ham_fft[:len(segment) // 2]  # Discard half points
     # Generate frequency axis 
-    freq_axis = np.fft.fftfreq(len(segment), 1/sampling_frequency)[:len(segment) // 2]
+    freq_axis = np.fft.fftfreq(len(segment), 1/sampling_rate)[:len(segment) // 2]
     return ham_fft,freq_axis
 
 def Mean_Frequency(ham_fft,freq_axis):
@@ -163,7 +163,7 @@ def Create_WV_Datasets(a,d,label):
     data=pd.concat([data1,data2],axis=1)
     return data
 
-def All_Features(data1,data2,data3,time,segment_length,overlap_percentage,sampling_frequency,level,suffix):
+def All_Features(data1,data2,data3,time,segment_length,overlap_percentage,sampling_rate,level,suffix):
     # create the times columns of each segment
     start_time_segment=[]
     end_time_segment=[]
@@ -179,9 +179,9 @@ def All_Features(data1,data2,data3,time,segment_length,overlap_percentage,sampli
    
     
     #Calculate all the feature for every axis
-    data1_f=features_extraction(data1,segment_length,overlap_percentage,sampling_frequency,level)
-    data2_f=features_extraction(data2,segment_length,overlap_percentage,sampling_frequency,level)
-    data3_f=features_extraction(data3,segment_length,overlap_percentage,sampling_frequency,level)
+    data1_f=features_extraction(data1,segment_length,overlap_percentage,sampling_rate,level)
+    data2_f=features_extraction(data2,segment_length,overlap_percentage,sampling_rate,level)
+    data3_f=features_extraction(data3,segment_length,overlap_percentage,sampling_rate,level)
 
     #Append the suffix for every feature
     data1_f.columns=data1_f.columns + " " + suffix[0]
