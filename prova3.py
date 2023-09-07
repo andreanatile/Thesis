@@ -32,7 +32,7 @@ plt.xlim(0, sampling_rate / 2)
 
 # Plot the second Fourier Transform
 plt.subplot(2, 1, 2)  # Subplot 2 (2 rows, 1 column, 2nd position)
-plt.plot(frequencies, np.abs(FFT_segments[20]))
+plt.plot(frequencies, np.abs(FFT_segments[55]))
 plt.title('Fourier Transform of Acceleration y (m/s^2)')
 plt.xlabel('Frequency (Hz)')
 plt.ylabel('Amplitude')
