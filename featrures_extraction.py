@@ -6,18 +6,10 @@ import pywt
 from scipy.interpolate import interp1d
 
 def features_extraction(data,segment_length,overlap_percentage,sampling_frequency,level):
-    overlap_length = int(segment_length * overlap_percentage)  # Length of the overlap
-    # Initialize empty lists to store the segments
-    segments = []
-    start_time_segment=[]
-    end_time_segment=[]
-    
-    # Create segments of data
-    for i in range(0, len(data) - segment_length + 1, segment_length - overlap_length):
-        segment = data[i:i+segment_length]
-        segments.append(segment)
+    #Create segments
+    segments=Segmentation(data,segment_length,overlap_percentage)
        
-    
+    #Initialize arrays
     Mean=[]
     Std=[]
     Var=[]
@@ -37,6 +29,7 @@ def features_extraction(data,segment_length,overlap_percentage,sampling_frequenc
     approx_energy_wv=[]
     detail_energy_wv=[]
 
+    #Load arrays 
     for i in range(0,len(segments)):
         Mean.append(segments[i].mean())
         Std.append(segments[i].std())
@@ -212,3 +205,15 @@ def UpSampling(data,original_freq,desired_freq):
     interpolation_function = interp1d(original_time, data, kind='linear', fill_value='extrapolate')
     upsampled_data = interpolation_function(desired_time)
     return upsampled_data
+
+def Segmentation(data,segment_length,overlap_percentage):
+    overlap_length = int(segment_length * overlap_percentage)  # Length of the overlap
+    # Initialize empty lists to store the segments
+    segments = []
+    
+    # Create segments of data
+    for i in range(0, len(data) - segment_length + 1, segment_length - overlap_length):
+        segment = data[i:i+segment_length]
+        segments.append(segment)
+    
+    return segments
