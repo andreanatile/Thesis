@@ -9,7 +9,7 @@ Sacc=pd.read_csv("data/smalldrive/Accelerometer.csv")
 location=pd.read_csv('data/smalldrive/Location.csv')
 SaccY=Sacc['Acceleration y (m/s^2)']
 
-segments=ft.Segmentation(SaccY,1000,0)
+segments=ft.Segmentation(SaccY,1000,0.66)
 
 FFT_segments=[]
 # Calculate the corresponding frequency values
@@ -19,11 +19,6 @@ frequencies = np.fft.fftfreq(1000, d=1/sampling_rate)
 for segment in segments:
     FFT_segments.append(np.fft.fft(segment))
 
-first_fft=[]
-for segment in FFT_segments:
-    first_fft.append(segment[0])
-
-print(first_fft)
     
 plt.figure(figsize=(10, 6))
 
