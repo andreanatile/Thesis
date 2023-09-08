@@ -30,8 +30,7 @@ for i in range(0,len(FFT_Segments)):
         else:
             filtered_Segments.append(segments[i])
     else:
-        
-        max_freq_index,max_energy,b,a=notch_filter(FFT_Segments[0],previous_max_freq_index,pervious_max_amplitude,sampling_rate,0.66)
+        max_freq_index,max_energy,b,a=notch_filter(FFT_Segments[i],previous_max_freq_index,pervious_max_amplitude,sampling_rate,0.66)
         previous_max_freq_index,pervious_max_amplitude=max_freq_index,max_energy
         if b is not None:
             flag+=1

@@ -18,7 +18,7 @@ def notch_filter(current_segmentFFT,previous_max_freq_index,pervious_max_amplitu
     energy_in_bands = []
 
     # Calculate energy for each frequency band using overlapping windows
-    for i in range(step, int(len(current_segmentFFT)/2)- window_size + 1, step):
+    for i in range(1, int(len(current_segmentFFT)/2)- window_size + 1, step):
         window_data = current_segmentFFT[i:i+window_size]
             
         # Calculate the energy in each band
