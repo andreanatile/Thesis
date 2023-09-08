@@ -31,7 +31,7 @@ def notch_filter(current_segmentFFT,previous_max_freq_index,pervious_max_amplitu
     max_freq_index=np.argmax(energy_in_bands)
     max_energy=np.max(energy_in_bands)
 
-    if (abs(max_freq_index-previous_max_freq_index)<=1) & (abs(max_energy-pervious_max_amplitude)<=0.005*pervious_max_amplitude):
+    if (abs(max_freq_index-previous_max_freq_index)<=1) & (abs(max_energy-pervious_max_amplitude)<=0.2*pervious_max_amplitude):
         f1=step*max_freq_index
         f2=f1+band_size
         print(max_freq_index)
