@@ -1,7 +1,7 @@
 import pandas as pd
 import re
 
-def Extract_Labels_fromString(data_string):
+def Extract_Labels_fromTeroSubliter(data_string):
     # Initialize empty lists to store extracted information
     number = []
     time_start = []
