@@ -174,8 +174,8 @@ def All_Features(data1,data2,data3,time,segment_length,overlap_percentage,sampli
         end_time_segment.append(time[i+segment_length])
 
     # Create the time DataFrame
-    Time_df=pd.DataFrame({'Start Time segment (s)':start_time_segment,
-                        'End Time segment (s)':end_time_segment})
+    Time_df=pd.DataFrame({'Time Start (s)':start_time_segment,
+                        'Time End (s)':end_time_segment})
    
     
     #Calculate all the feature for every axis

@@ -45,5 +45,3 @@ def notch_filter(current_segmentFFT,previous_max_freq_index,pervious_max_amplitu
         return max_freq_index,max_energy,None,None
         
 
-
-

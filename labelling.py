@@ -35,6 +35,9 @@ def Extract_Labels_fromTeroSubliter(data_string):
         'Time End (s)': time_end,
         'Anomaly': anomaly
     })
+    
+    # Replace NaN values in the Anomaly column with 'ok'
+    df['Anomaly'].fillna('ok', inplace=True)
 
     # Return the dataframe
     return df
@@ -46,3 +49,16 @@ def time_to_seconds(time_str):
     seconds += int(parts[-2]) * 60
     seconds += int(parts[-3]) * 3600
     return seconds
+
+def Merge_Feature_Label(feature,labels):
+    merged_df = feature.copy()  # Create a copy of df1 to keep the original intact
+    for idx, row in labels.iterrows():
+        mask = (merged_df['Time Start (s)'] <= row['Time Start (s)']) & (merged_df['Time End (s)'] >= row['Time End (s)'])
+        if mask.any():
+            merged_df.loc[mask, 'Anomaly'] = row['Anomaly']
+
+    # Replace NaN values in the Anomaly column with 'ok'
+    merged_df['Anomaly'].fillna('ok', inplace=True)
+    
+    return merged_df
+
