@@ -47,7 +47,7 @@ features11=ft.Combining_features_from_segments(list_segments[0],list_segments[1]
                                                suffix)
 
 features08=ft.Combining_features_from_segments(list_segments[3],list_segments[4],
-                                               list_segments[5],Time11,segment_length,
+                                               list_segments[5],Time08,segment_length,
                                                overlap_percentage,sampling_rate,
                                                suffix)
 
