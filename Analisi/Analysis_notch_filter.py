@@ -7,12 +7,13 @@ from scipy.signal import butter, filtfilt
 Sacc900=pd.read_csv("data/fermo 900rpm/Accelerometer.csv")
 Sacc1500=pd.read_csv("data/fermo 1500rpm/Accelerometer.csv")
 Sacc2000=pd.read_csv("data/fermo 2000rpm/Accelerometer.csv")
+Sgyr2000=pd.read_csv("data/fermo 2000rpm/Gyroscope.csv")
 
 #filter the start and the end of the measurement for removing the touch of the screen
 Sacc900 = Sacc900[(Sacc900['Time (s)'] > 1) & (Sacc900['Time (s)'] < 10)]
 Sacc1500 = Sacc1500[(Sacc1500['Time (s)'] > 1) & (Sacc1500['Time (s)'] < 10)]
 Sacc2000 = Sacc2000[(Sacc2000['Time (s)'] > 1) & (Sacc2000['Time (s)'] < 10)]
-
+Sgyr2000 = Sgyr2000[(Sgyr2000['Time (s)'] > 2) & (Sgyr2000['Time (s)'] < 9)]
 sampling_rate=400
 #----------------Fourier Trasform 900rpm---------------------------------
 
@@ -134,4 +135,28 @@ plt.xlabel('Time (s)')
 plt.title('Spectrogram of Accelerometer y-axis Data')
 plt.ylim(0, sampling_rate / 2)  # Display only positive frequencies
 plt.tight_layout()
+plt.show()
+
+#----------------------------- FFT gyroscope x at 2000rpm----------------------------
+fft_2000=np.fft.fft(Sgyr2000['Gyroscope x (rad/s)'])
+freq_2000=np.fft.fftfreq(len(Sgyr2000['Gyroscope x (rad/s)']),d=1/sampling_rate)
+
+
+# Plot the original signal (optional)
+plt.figure(figsize=(10, 6))
+plt.subplot(2, 1, 1)
+plt.plot(Sgyr2000['Time (s)'],Sgyr2000['Gyroscope x (rad/s)'])
+plt.title('Original Signal of Gyroscope x (rad/s) at 2000rpm')
+plt.xlabel('Time')
+plt.ylabel('Amplitude')
+
+# Plot the Fourier Transform
+plt.subplot(2, 1, 2)
+plt.plot(freq_2000, np.abs(fft_2000))
+plt.title('Fourier Transform of Gyroscope x (rad/s) at 2000rpm')
+plt.xlabel('Frequency (Hz)')
+plt.ylabel('Amplitude')
+plt.xlim(0, sampling_rate / 2)  
+plt.tight_layout()
+
 plt.show()
