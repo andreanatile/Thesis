@@ -62,3 +62,8 @@ def Merge_Feature_Label(feature,labels):
     
     return merged_df
 
+def Merge(feature,labels):
+    merge_df=feature.copy()
+    merge_df.columuns.append("Anomaly")
+
+    

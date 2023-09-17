@@ -71,12 +71,14 @@ merge11 = lb.Merge_Feature_Label(features11, labels11)
 # Drop the time columns since we won't use them anymore
 merge11 = merge11.drop(['Time Start (s)', 'Time End (s)'], axis=1)
 merge08 = merge08.drop(['Time Start (s)', 'Time End (s)'], axis=1)
-print(len(merge11))
-print(len(merge08))
+
 # Concat the two dataset, creating the dataset for training the ML algorithm
 Training_Dataset = pd.concat([merge11, merge08], ignore_index=True)
 Training_Dataset['Anomaly'].replace(
-    ['Mild', 'Severe'], 'Potholes', inplace=True)
+    ['Mild', 'Severe','Span'], 'Anomaly', inplace=True) 
 # Save as csv file
 Training_Dataset.to_csv(
     "data/Training_Datasets/notchFiltered_Training_Dataset.csv", index=False)
+print(len(Training_Dataset[Training_Dataset['Anomaly']=='Potholes']))
+print(len(Training_Dataset[Training_Dataset['Anomaly']=='ok']))
+print(len(Training_Dataset[Training_Dataset['Anomaly']=='Span']))
