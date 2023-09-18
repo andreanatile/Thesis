@@ -51,7 +51,7 @@ def time_to_seconds(time_str):
     return seconds
 
 def Merge_Feature_Label(feature,labels):
-    merged_df = feature.copy()  # Create a copy of df1 to keep the original intact
+    merged_df = feature.copy()  # Create a copy of feature to keep the original intact
     for idx, row in labels.iterrows():
         mask = (merged_df['Time Start (s)'] <= row['Time Start (s)']) & (merged_df['Time End (s)'] >= row['Time End (s)'])
         if mask.any():
@@ -62,8 +62,5 @@ def Merge_Feature_Label(feature,labels):
     
     return merged_df
 
-def Merge(feature,labels):
-    merge_df=feature.copy()
-    merge_df.columuns.append("Anomaly")
 
     

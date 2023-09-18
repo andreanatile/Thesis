@@ -12,11 +12,11 @@ from imblearn.under_sampling import RandomUnderSampler
 
 
 
-# Load your dataset (replace 'data.csv' with your dataset's path)
+# Load dataset
 data = pd.read_csv('data\Training_Datasets\\notchFiltered_Training_Dataset.csv')
 
 
-# Assuming your dataset has a 'label' column with multi-class labels (ok, span, mild, severe)
+# Create dataframe X and y
 X = data.drop('Anomaly', axis=1)  # Features
 y = data['Anomaly']  # Labels
 
