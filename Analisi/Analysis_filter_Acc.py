@@ -11,16 +11,19 @@ csv_file_path = 'data/fermo/Accelerometer.csv'
 Sacc = pd.read_csv(csv_file_path)
 Sacc=Sacc[Sacc['Time (s)']<5]
 pd.set_option('display.max_columns', None)
-#print(data.head())
 
+# Remove the DC offset, fisrt calculate the mean value
+mean_value=np.mean(Sacc['Acceleration y (m/s^2)'])
+Sacc_no_offset=Sacc['Acceleration y (m/s^2)']-mean_value
+fft_result=np.fft.fft(Sacc['Acceleration y (m/s^2)'])
 
-# Calculate the Fourier Transform of accelerometer y axis
-fft_result = np.fft.fft(Sacc["Acceleration y (m/s^2)"])
+# Calculate the FFT without offset
+fft_no_offset=np.fft.fft(Sacc_no_offset)
 
 # Calculate the corresponding frequency values
 sampling_rate = 400
 frequencies = np.fft.fftfreq(len(Sacc["Acceleration y (m/s^2)"]), d=1/sampling_rate)
-index=np.argmax(np.abs(fft_result))
+index=np.argmax(np.abs(fft_no_offset))
 max_amplitude_frequency=frequencies[index]
 # Plot the original signal and its Fourier Transform
 plt.figure(figsize=(10, 6))
@@ -28,16 +31,16 @@ plt.figure(figsize=(10, 6))
 # Plot the original signal (optional)
 plt.subplot(2, 1, 1)
 plt.plot(Sacc['Time (s)'],Sacc["Acceleration y (m/s^2)"])
-plt.title('Original Signal of Acceleration y (m/s^2)')
+plt.title('Original Signal of Acceleration y')
 plt.xlabel('Time')
-plt.ylabel('Amplitude')
+plt.ylabel('Amplitude (m/s^2)')
 
 # Plot the Fourier Transform
 plt.subplot(2, 1, 2)
-plt.plot(frequencies, np.abs(fft_result))
-plt.title('Fourier Transform of Acceleration y (m/s^2)')
+plt.plot(frequencies, np.abs(fft_no_offset))
+plt.title('Fourier Transform of Acceleration y')
 plt.xlabel('Frequency (Hz)')
-plt.ylabel('Amplitude')
+plt.ylabel('Amplitude (m/s^2)')
 plt.xlim(0, sampling_rate / 2)  
 plt.tight_layout()
 
@@ -81,50 +84,45 @@ plt.figure(figsize=(10, 6))
 plt.plot(Sacc['Time (s)'], Sacc["Acceleration y (m/s^2)"], label='Original yacc')
 plt.plot(Sacc['Time (s)'], filtered_yacc, label='Filtered yacc')
 plt.xlabel('Time (s)')
-plt.ylabel('yacc')
+plt.ylabel('Amplitude (m/s^2)')
 plt.legend()
 plt.title('Original vs Filtered yacc')
 plt.grid(True)
 plt.show()
 
 
-# Remove the DC ofstet, fisrt calculate the mean value
 
-mean_value=np.mean(Sacc['Acceleration y (m/s^2)'])
-Sacc_no_ofset=Sacc['Acceleration y (m/s^2)']-mean_value
 
-# Plot the FFT transform
 
-fft_no_ofset=np.fft.fft(Sacc_no_ofset)
 
 plt.figure(figsize=(10,6))
 
-# Plot FFT with no ofset
+# Plot FFT with no offset
 plt.subplot(2,1,1)
-plt.plot(frequencies,np.abs(fft_no_ofset))
-plt.title('Fourier Transform of Acceleration y (m/s^2) with no ofset')
+plt.plot(frequencies,np.abs(fft_no_offset))
+plt.title('Fourier Transform of Acceleration y with no offset')
 plt.xlabel('Frequency (Hz)')
-plt.ylabel('Amplitude')
+plt.ylabel('Amplitude (m/s^2)')
 plt.xlim(0, sampling_rate / 2)  
 plt.tight_layout()
 
 #Plot raw fft
 plt.subplot(2,1,2)
 plt.plot(frequencies,np.abs(fft_result))
-plt.title('Fourier Transform of Acceleration y (m/s^2) with  ofset')
+plt.title('Fourier Transform of Acceleration y with  offset')
 plt.xlabel('Frequency (Hz)')
-plt.ylabel('Amplitude')
+plt.ylabel('Amplitude (m/s^2)')
 plt.xlim(0, sampling_rate / 2)  
 plt.tight_layout()
 
 plt.show()
 
 
-# Plot fft with no ofset  with amplitude in dB vs no dB
+# Plot fft with no offset  with amplitude in dB vs no dB
 # Plot FFT dB
 plt.subplot(2,1,1)
-plt.plot(frequencies,20*np.log10(np.abs(fft_no_ofset)))
-plt.title('Fourier Transform of Acceleration y (m/s^2) with no ofset in dB')
+plt.plot(frequencies,20*np.log10(np.abs(fft_no_offset)))
+plt.title('Fourier Transform of Acceleration y (m/s^2) with no offset in dB')
 plt.xlabel('Frequency (Hz)')
 plt.ylabel('Amplitude in dB')
 plt.xlim(0, sampling_rate / 2)  
@@ -132,10 +130,10 @@ plt.tight_layout()
 
 #Plot raw fft
 plt.subplot(2,1,2)
-plt.plot(frequencies,np.abs(fft_no_ofset))
-plt.title('Fourier Transform of Acceleration y (m/s^2) with no ofset')
+plt.plot(frequencies,np.abs(fft_no_offset))
+plt.title('Fourier Transform of Acceleration y (m/s^2) with no offset')
 plt.xlabel('Frequency (Hz)')
-plt.ylabel('Amplitude')
+plt.ylabel('Amplitude (m/s^2)')
 plt.xlim(0, sampling_rate / 2)  
 plt.tight_layout()
 
