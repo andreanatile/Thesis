@@ -8,8 +8,6 @@ from scipy.signal import butter, filtfilt
 data_Gyr = pd.read_csv('data/fermo/Gyroscope.csv')
 data_Gyr=data_Gyr[(data_Gyr['Time (s)']<5)&(data_Gyr['Time (s)']>2)]
 
-print(data_Gyr.head())
-
 #--------------- Calculate the Fourier Transform of z-axis Gyroscope--------------------
 fft_result_Gyr_z = np.fft.fft(data_Gyr["Gyroscope z (rad/s)"])
 
@@ -24,9 +22,9 @@ plt.figure(figsize=(10, 6))
 # Plot the original signal 
 plt.subplot(2, 1, 1)
 plt.plot(data_Gyr['Time (s)'],data_Gyr["Gyroscope z (rad/s)"])
-plt.title('Original Signal of Z-axis Gyroscope')
+plt.title('The original signal of the Z-axis gyroscope reads at 900rpm with the engine running but the vehicle stationary')
 plt.xlabel('Time')
-plt.ylabel('Amplitude')
+plt.ylabel('Amplitude (rad/s)')
 
 # Plot the Fourier Transform
 plt.subplot(2, 1, 2)
@@ -37,6 +35,7 @@ plt.ylabel('Amplitude')
 plt.xlim(0, sampling_rate / 2)  # Display only positive frequencies
 plt.tight_layout()
 
+plt.savefig("plot/Gyroscope/fft_z_900rpm.png")
 plt.show()
 print(max_amplitude_frequency)
 
@@ -47,12 +46,12 @@ fft_result_Gyr_x = np.fft.fft(data_Gyr["Gyroscope x (rad/s)"])
 # Plot the original signal and its Fourier Transform
 plt.figure(figsize=(10, 6))
 
-# Plot the original signal (optional)
+# Plot the original signal 
 plt.subplot(2, 1, 1)
 plt.plot(data_Gyr['Time (s)'],data_Gyr["Gyroscope x (rad/s)"])
-plt.title('Original Signal of X-axis Gyroscope')
+plt.title('The original signal of the X-axis gyroscope reads at 900rpm with the engine running but the vehicle stationary')
 plt.xlabel('Time')
-plt.ylabel('Amplitude')
+plt.ylabel('Amplitude (rad/s)')
 
 # Plot the Fourier Transform
 plt.subplot(2, 1, 2)
@@ -62,5 +61,5 @@ plt.xlabel('Frequency (Hz)')
 plt.ylabel('Amplitude')
 plt.xlim(0, sampling_rate / 2)  # Display only positive frequencies
 plt.tight_layout()
-
+plt.savefig("plot/Gyroscope/fft_x_900rpm.png")
 plt.show()
