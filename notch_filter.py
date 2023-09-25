@@ -1,14 +1,12 @@
-import pandas as pd
 import numpy as np
 from scipy import signal
-import matplotlib.pyplot as plt
-import pywt
 from featrures_extraction import Segmentation
 
 def notch_filter(current_segmentFFT, previous_max_freq_index, pervious_max_amplitude, sampling_rate, overlap_percentage):
 
     # Define parameters for the analysis
     band_size = 10  # Frequency band size in Hz
+    frequency_resolution=sampling_rate/len(current_segmentFFT)
 
     window_size = int(band_size*len(current_segmentFFT) /
                       sampling_rate)  # Size of each analysis window
@@ -34,11 +32,15 @@ def notch_filter(current_segmentFFT, previous_max_freq_index, pervious_max_ampli
         f2 = f1+band_size
         print(max_freq_index)
         # Frequency to remove from the signal,0 < w0 < 1, with w0 = 1 corresponding to half of the sampling frequency.
-        w0 = (f1+f2)/sampling_rate
+        f0 = (f1+f2)/2*frequency_resolution
+        w0=f0/(0.5*sampling_rate)
+        
         # characterizes notch filter -3 dB bandwidth bw relative to its center frequency, Q = w0/bw
         Q = w0/band_size
-
-        b, a = signal.iirnotch(w0, Q, sampling_rate)
+        
+        # Return the numerator(b) and denominator(a) polynomials of the IIR filter
+        b, a = signal.iirnotch(w0, Q, sampling_rate) 
+        
         return max_freq_index, max_energy, b, a
     else:
         return max_freq_index, max_energy, None, None
@@ -57,26 +59,27 @@ def notch_filtering(data,segment_length,sampling_rate, overlap_percentage):
 
 
     for i in range(0, len(FFT_Segments)):
-        # In case is the first segment set the previous frequency of the max band and amplitude at 0
+        # In case it's the first segment, set the previous frequency of the max band and amplitude at 0
         if i == 0:
-            previous_max_freq_index = pervious_max_amplitude = 0
-            max_freq_index, max_energy, b, a = notch_filter(
-                FFT_Segments[0], previous_max_freq_index, pervious_max_amplitude, sampling_rate, 0.66)
-            previous_max_freq_index, pervious_max_amplitude = max_freq_index, max_energy
-            
-            if b is not None:
-                filtered_Segments.append(signal.filtfilt(b, a, segments[i]))
-            else:
-                filtered_Segments.append(segments[i])
+            previous_max_freq_index, prev_max_energy, b, a = notch_filter(
+                FFT_Segments[0], 0, 0, sampling_rate, 0.66)
         else:
             max_freq_index, max_energy, b, a = notch_filter(
-                FFT_Segments[i], previous_max_freq_index, pervious_max_amplitude, sampling_rate, 0.66)
-            previous_max_freq_index, pervious_max_amplitude = max_freq_index, max_energy
-            if b is not None:
-                flag += 1
-                filtered_Segments.append(signal.filtfilt(b, a, segments[i]))
-            else:
-                filtered_Segments.append(segments[i])
+                FFT_Segments[i], previous_max_freq_index, prev_max_energy, sampling_rate, 0.66)
+            previous_max_freq_index, prev_max_energy = max_freq_index, max_energy
+        
+        if b is not None:
+            filtered_segment_fft = signal.lfilter(b, a, FFT_Segments[i])
+            filtered_segment = np.real(np.fft.ifft(filtered_segment_fft))
+            filtered_Segments.append(filtered_segment)
+        else:
+            filtered_Segments.append(segments[i])
     
+        # Print debugging information
+        print("Segment:", i)
+        print("Original Segment:", segments[i])
+        print("Filtered Segment:", filtered_Segments[i])
+        print("=====================================")
+
     # Return the filtered segments
     return filtered_Segments
