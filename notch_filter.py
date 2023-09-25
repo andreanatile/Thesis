@@ -3,15 +3,15 @@ from scipy import signal
 from featrures_extraction import Segmentation
 
 def notch_filter(current_segmentFFT, previous_max_freq_index, pervious_max_amplitude, sampling_rate, overlap_percentage):
-
+    print(current_segmentFFT)
     # Define parameters for the analysis
     band_size = 10  # Frequency band size in Hz
-    frequency_resolution=sampling_rate/len(current_segmentFFT)
+    frequency_resolution=sampling_rate/len(current_segmentFFT) #0.4
 
     window_size = int(band_size*len(current_segmentFFT) /
-                      sampling_rate)  # Size of each analysis window
+                      sampling_rate)  # Size of each analysis window 25
     # Step size for overlapping windows
-    step = int(window_size * (1 - overlap_percentage))
+    step = int(window_size * (1 - overlap_percentage))#9
 
     # Initialize lists to store energy in each band
     energy_in_bands = []
@@ -28,11 +28,11 @@ def notch_filter(current_segmentFFT, previous_max_freq_index, pervious_max_ampli
     max_energy = np.max(energy_in_bands)
 
     if (abs(max_freq_index-previous_max_freq_index) <= 1) & (abs(max_energy-pervious_max_amplitude) <= 0.2*pervious_max_amplitude):
-        f1 = step*max_freq_index
+        f1 = step*max_freq_index*frequency_resolution
         f2 = f1+band_size
-        print(max_freq_index)
+        #print(max_freq_index)
         # Frequency to remove from the signal,0 < w0 < 1, with w0 = 1 corresponding to half of the sampling frequency.
-        f0 = (f1+f2)/2*frequency_resolution
+        f0 = (f1+f2)/2
         w0=f0/(0.5*sampling_rate)
         
         # characterizes notch filter -3 dB bandwidth bw relative to its center frequency, Q = w0/bw
@@ -69,17 +69,17 @@ def notch_filtering(data,segment_length,sampling_rate, overlap_percentage):
             previous_max_freq_index, prev_max_energy = max_freq_index, max_energy
         
         if b is not None:
-            filtered_segment_fft = signal.lfilter(b, a, FFT_Segments[i])
-            filtered_segment = np.real(np.fft.ifft(filtered_segment_fft))
+            filtered_segment=signal.filtfilt(b,a,segments[i])
             filtered_Segments.append(filtered_segment)
+            print(i)
         else:
             filtered_Segments.append(segments[i])
     
-        # Print debugging information
+        """ # Print debugging information
         print("Segment:", i)
         print("Original Segment:", segments[i])
         print("Filtered Segment:", filtered_Segments[i])
-        print("=====================================")
+        print("=====================================") """
 
     # Return the filtered segments
     return filtered_Segments
