@@ -37,7 +37,7 @@ X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
 
 # Create an SVM classifier with an RBF kernel for multi-class classification
-clf = svm.SVC(kernel='linear', gamma='scale', C=100, decision_function_shape='ovr')  # 'ovr' for one-vs-rest
+clf = svm.SVC(kernel='linear', gamma='scale', C=0.1, decision_function_shape='ovr')  # 'ovr' for one-vs-rest
 
 # Train the SVM model
 clf.fit(X_train, y_train)
