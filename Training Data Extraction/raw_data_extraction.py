@@ -61,6 +61,7 @@ merge08 = merge08.drop(['Time Start (s)', 'Time End (s)'], axis=1)
 
 # Concat the two dataset, creating the dataset for training the ML algorithm
 Training_Dataset = pd.concat([merge11, merge08], ignore_index=True)
+
 Training_Dataset['Anomaly'].replace(
     ['Mild', 'Severe','Span'], 'Anomaly', inplace=True)
 # Save as csv file
