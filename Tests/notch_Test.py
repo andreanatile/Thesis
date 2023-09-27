@@ -10,7 +10,7 @@ from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from imblearn.over_sampling import RandomOverSampler
 from imblearn.under_sampling import RandomUnderSampler
 
-
+print('This is filtered test')
 
 # Load dataset
 data = pd.read_csv('data\Training_Datasets\\notchFiltered_Training_Dataset.csv')
@@ -59,3 +59,4 @@ highest_accuracy=grid_search.best_score_
 print(highest_accuracy)
 print(best_parameters)
  
+print("======================================================")

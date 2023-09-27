@@ -9,6 +9,7 @@ from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from imblearn.over_sampling import RandomOverSampler
 from imblearn.under_sampling import RandomUnderSampler
+import notch_Test as nt
 
 
 
@@ -22,10 +23,11 @@ y = data['Anomaly']  # Labels
 # Calculate the sampling strategy ratio
 
 
-# Create an instance of RandomUnderSampler for undersampling "ok"
+""" # Create an instance of RandomUnderSampler for undersampling "ok"
 undersampler = RandomUnderSampler(sampling_strategy={'ok':300,'Anomaly':99}, random_state=None)
-X_resampled, y_resampled = undersampler.fit_resample(X, y)
-
+X_resampled, y_resampled = undersampler.fit_resample(X, y) """
+X_resampled=nt.X_resampled
+y_resampled=nt.y_resampled
 
 X_train, X_test, y_train, y_test = train_test_split(X_resampled, y_resampled, test_size=0.2, random_state=42)
 

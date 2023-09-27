@@ -31,13 +31,11 @@ def notch_filter(current_segmentFFT, previous_max_freq_index, pervious_max_ampli
     if (abs(max_freq_index-previous_max_freq_index) <= 1) & (abs(max_energy-pervious_max_amplitude) <= 0.2*pervious_max_amplitude):
         f1 = step*max_freq_index*frequency_resolution
         f2 = f1+band_size
-        # print(max_freq_index)
+       
         # Frequency to remove from the signal,0 < w0 < 1, with w0 = 1 corresponding to half of the sampling frequency.
         f0 = (f1+f2)/2
         w0 = f0#/(0.5*sampling_rate)
-        print("\nFrequenza" + str(f0))
-
-        """ print("\nIndice" + str(i)) """
+        
 
         # characterizes notch filter -3 dB bandwidth bw relative to its center frequency, Q = w0/bw
         Q = w0/20
@@ -75,15 +73,11 @@ def notch_filtering(data, segment_length, sampling_rate, overlap_percentage):
         if b is not None:
             filtered_segment = signal.filtfilt(b, a, segments[i])
             filtered_Segments.append(filtered_segment)
-            print(i)
+            
         else:
             filtered_Segments.append(segments[i])
 
-        """ # Print debugging information
-        print("Segment:", i)
-        print("Original Segment:", segments[i])
-        print("Filtered Segment:", filtered_Segments[i])
-        print("=====================================") """
+        
 
     # Return the filtered segments
     return filtered_Segments
