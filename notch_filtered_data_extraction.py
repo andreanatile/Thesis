@@ -2,6 +2,8 @@ import pandas as pd
 import labelling as lb
 import numpy as np
 import featrures_extraction as ft
+from notch_filter import notch_filtering
+from imblearn.under_sampling import RandomUnderSampler
 
 
 
@@ -36,10 +38,14 @@ Time08=Sacc08['Time (s)']
 list_signals=[Yacc11,Xgyr11,Zgyr11,Yacc08,Xgyr08,Zgyr08]
 list_segments=[]
 
-# Append in the list all the segments for every signal
+""" # Append in the list all the segments for every signal
 for signal in list_signals:
     list_segments.append(ft.Segmentation(signal,segment_length,overlap_percentage))
 
+# Filter the segments
+list_segments_filtered=[] """
+for signal in list_signals:
+    list_segments.append(notch_filtering(signal,segment_length,sampling_rate,overlap_percentage))
 # Calculate the combining features from the two measurement using segments
 features11=ft.Combining_features_from_segments(list_segments[0],list_segments[1],
                                                list_segments[2],Time11,segment_length,
@@ -71,14 +77,15 @@ merge11 = lb.Merge_Feature_Label(features11, labels11)
 # Drop the time columns since we won't use them anymore
 merge11 = merge11.drop(['Time Start (s)', 'Time End (s)'], axis=1)
 merge08 = merge08.drop(['Time Start (s)', 'Time End (s)'], axis=1)
+merge08=merge08[merge08['Anomaly']!='ok']
 
 # Concat the two dataset, creating the dataset for training the ML algorithm
 Training_Dataset = pd.concat([merge11, merge08], ignore_index=True)
 Training_Dataset['Anomaly'].replace(
     ['Mild', 'Severe','Span'], 'Anomaly', inplace=True) 
+filt=Training_Dataset[Training_Dataset['Anomaly']=='ok'].head(300)
+anomaly=Training_Dataset[Training_Dataset['Anomaly']=='Anomaly']
+total=pd.concat([filt,anomaly],ignore_index=True) 
 # Save as csv file
-Training_Dataset.to_csv(
+total.to_csv(
     "data/Training_Datasets/notchFiltered_Training_Dataset.csv", index=False)
-print(len(Training_Dataset[Training_Dataset['Anomaly']=='Potholes']))
-print(len(Training_Dataset[Training_Dataset['Anomaly']=='ok']))
-print(len(Training_Dataset[Training_Dataset['Anomaly']=='Span']))

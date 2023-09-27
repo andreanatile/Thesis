@@ -58,6 +58,7 @@ merge08 = lb.Merge_Feature_Label(feature08, labels08)
 # Drop the time columns since we won't use them anymore
 merge11 = merge11.drop(['Time Start (s)', 'Time End (s)'], axis=1)
 merge08 = merge08.drop(['Time Start (s)', 'Time End (s)'], axis=1)
+merge08=merge08[merge08['Anomaly']!='ok']
 
 # Concat the two dataset, creating the dataset for training the ML algorithm
 Training_Dataset = pd.concat([merge11, merge08], ignore_index=True)
@@ -65,7 +66,11 @@ Training_Dataset = pd.concat([merge11, merge08], ignore_index=True)
 Training_Dataset['Anomaly'].replace(
     ['Mild', 'Severe','Span'], 'Anomaly', inplace=True)
 # Save as csv file
-Training_Dataset.to_csv(
+filt=Training_Dataset[Training_Dataset['Anomaly']=='ok'].head(300)
+anomaly=Training_Dataset[Training_Dataset['Anomaly']=='Anomaly']
+total=pd.concat([filt,anomaly],ignore_index=True) 
+# Save as csv file
+total.to_csv(
     "data/Training_Datasets/raw_Training_Dataset.csv", index=False)
 
 

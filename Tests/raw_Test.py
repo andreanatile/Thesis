@@ -9,7 +9,7 @@ from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from imblearn.over_sampling import RandomOverSampler
 from imblearn.under_sampling import RandomUnderSampler
-import notch_Test as nt
+
 
 
 
@@ -23,13 +23,13 @@ y = data['Anomaly']  # Labels
 # Calculate the sampling strategy ratio
 
 
-""" # Create an instance of RandomUnderSampler for undersampling "ok"
+"""  # Create an instance of RandomUnderSampler for undersampling "ok"
 undersampler = RandomUnderSampler(sampling_strategy={'ok':300,'Anomaly':99}, random_state=None)
-X_resampled, y_resampled = undersampler.fit_resample(X, y) """
-X_resampled=nt.X_resampled
-y_resampled=nt.y_resampled
+X_resampled, y_resampled = undersampler.fit_resample(X, y)  """
+""" X_resampled=nt.X_resampled
+y_resampled=nt.y_resampled """
 
-X_train, X_test, y_train, y_test = train_test_split(X_resampled, y_resampled, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # Standardize the features (scaling)
 scaler = StandardScaler()
@@ -37,7 +37,7 @@ X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
 
 # Create an SVM classifier with an RBF kernel for multi-class classification
-clf = svm.SVC(kernel='linear', gamma='scale', C=0.1, decision_function_shape='ovr')  # 'ovr' for one-vs-rest
+clf = svm.SVC(kernel='linear', gamma='scale', C=100, decision_function_shape='ovr')  # 'ovr' for one-vs-rest
 
 # Train the SVM model
 clf.fit(X_train, y_train)
@@ -51,9 +51,9 @@ print("\nClassification Report:\n", classification_report(y_test, y_pred))
 #  fine-tune hyperparameters using technique GridSearchCV
 model=SVC()
 param_grid = {
-    'C': [0.1, 1, 10],
+    'C': [0.1, 1, 10,50,100,200],
     'kernel': ['linear', 'rbf', 'poly'],
-    'gamma': ['scale', 'auto', 0.1, 1]
+    'gamma': ['scale', 'auto', 0.1, 1,0.2,0.002]
 }
 grid_search = GridSearchCV(model, param_grid, cv=5, n_jobs=-1, verbose=1)
 grid_search.fit(X_train, y_train)
