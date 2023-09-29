@@ -34,7 +34,7 @@ def notch_filter(current_segmentFFT, previous_max_freq_index, pervious_max_ampli
        
         # Frequency to remove from the signal,0 < w0 < 1, with w0 = 1 corresponding to half of the sampling frequency.
         f0 = (f1+f2)/2
-        w0 = f0#/(0.5*sampling_rate)
+        w0 = f0
         
 
         # characterizes notch filter -3 dB bandwidth bw relative to its center frequency, Q = w0/bw
