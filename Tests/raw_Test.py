@@ -1,4 +1,3 @@
-# Import necessary libraries
 import numpy as np
 import pandas as pd
 from sklearn import svm
@@ -8,7 +7,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 
-# Load your dataset (replace 'data.csv' with your dataset's path)
+# Loading dataset
 data = pd.read_csv('data\Training_Datasets\\raw_Training_Dataset.csv')
 
 
