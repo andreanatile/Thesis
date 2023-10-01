@@ -4,7 +4,7 @@ from scipy import signal
 import matplotlib.pyplot as plt
 from speed_dependency import Speed_Dependency, filtered_signal
 import featrures_extraction as ft
-from notch_filter import notch_filter
+from notch_filter import notch_filter_segment
 
 
 Sacc = pd.read_csv("data/smalldrive/Accelerometer.csv")
@@ -23,7 +23,7 @@ for segment in segments:
 for i in range(0, len(FFT_Segments)):
     if i == 0:
         previous_max_freq_index = pervious_max_amplitude = 0
-        max_freq_index, max_energy, b, a = notch_filter(
+        max_freq_index, max_energy, b, a = notch_filter_segment(
             FFT_Segments[0], previous_max_freq_index, pervious_max_amplitude, sampling_rate, 0.66)
         previous_max_freq_index, pervious_max_amplitude = max_freq_index, max_energy
         if b is not None:
@@ -31,7 +31,7 @@ for i in range(0, len(FFT_Segments)):
         else:
             filtered_Segments.append(segments[i])
     else:
-        max_freq_index, max_energy, b, a = notch_filter(
+        max_freq_index, max_energy, b, a = notch_filter_segment(
             FFT_Segments[i], previous_max_freq_index, pervious_max_amplitude, sampling_rate, 0.66)
         previous_max_freq_index, pervious_max_amplitude = max_freq_index, max_energy
         if b is not None:

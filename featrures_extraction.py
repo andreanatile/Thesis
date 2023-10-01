@@ -35,6 +35,7 @@ def features_extraction(data, segment_length, overlap_percentage, sampling_rate)
 
     # Load arrays
     for i in range(0, len(segments)):
+        # Time domain
         Mean.append(segments[i].mean())
         Std.append(segments[i].std())
         Var.append(segments[i].var())
@@ -43,13 +44,12 @@ def features_extraction(data, segment_length, overlap_percentage, sampling_rate)
         Zcr.append(
             np.sum(np.diff(np.sign(segments[i])) != 0) / (2 * len(segments[i])))
         Mean_Abs.append(np.abs(segments[i]).mean())
-        # not sure of abs or not, wikipedia say not
         sma.append(np.sum(abs(segments[i])))
-        # frequency domain
+        # Frequency domain
         ham_ftt, freq_axis = Hamming_Window_FFT(segments[i], sampling_rate)
         mean_frequency.append(Mean_Frequency(ham_ftt, freq_axis))
         median_frequency.append(Median_Frequency(ham_ftt, freq_axis))
-        # wavelet domain
+        # Wavelet domain
         approx_coeffs, detail_coeffs = SWT_Sym5(segments[i], level)
         # absolute mean of approx and detail
         a_abs_mean, d_abs_mean = Absolute_Mean_WV(
@@ -91,8 +91,7 @@ def features_extraction(data, segment_length, overlap_percentage, sampling_rate)
     features = pd.concat([features, abs_df, std_df, var_df, energy_df], axis=1)
     return features
 
-# Function fro calculate the FFT by Hamming window
-
+# Function for calculating the FFT by Hamming window
 
 def Hamming_Window_FFT(segment, sampling_rate):
     ham = np.hamming(len(segment))
@@ -105,12 +104,12 @@ def Hamming_Window_FFT(segment, sampling_rate):
         len(segment), 1/sampling_rate)[:len(segment) // 2]
     return ham_fft, freq_axis
 
-
+# Function for calculating the mean frequency
 def Mean_Frequency(ham_fft, freq_axis):
     mean_frequency = np.sum(ham_fft * freq_axis) / np.sum(ham_fft)
     return mean_frequency
 
-
+# Function for calculating the median frequency
 def Median_Frequency(ham_ftt, freq_axis):
     # Sort the FFT magnitudes in ascending order
     sorted_magnitudes = np.sort(ham_ftt)
@@ -230,7 +229,7 @@ def UpSampling(data, original_freq, desired_freq):
     upsampled_data = interpolation_function(desired_time)
     return upsampled_data
 
-
+# Function for segmenting data 
 def Segmentation(data, segment_length, overlap_percentage):
     # Length of the overlap
     overlap_length = int(segment_length * overlap_percentage)
@@ -241,7 +240,6 @@ def Segmentation(data, segment_length, overlap_percentage):
     for i in range(0, len(data) - segment_length + 1, segment_length - overlap_length):
         segment = data[i:i+segment_length]
         segments.append(segment)
-
     return segments
 
 # -------------------------------------features extraction directly from segments-----------
