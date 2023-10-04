@@ -72,6 +72,7 @@ def notch_filter_data(data, segment_length, sampling_rate, overlap_percentage):
         if b is not None:
             filtered_segment = signal.filtfilt(b, a, segments[i])
             filtered_Segments.append(filtered_segment)
+            print("segment filtered:" + str(i))
 
         else:
             filtered_Segments.append(segments[i])
