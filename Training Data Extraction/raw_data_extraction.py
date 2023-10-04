@@ -54,11 +54,14 @@ with open('data/2023-09-08/labels.txt', 'r') as file:
 # Extract labels
 labels08 = lb.Extract_Labels_fromTeroSubliter(file_contents08)
 merge08 = lb.Merge_Feature_Label(feature08, labels08)
-
+merge08=merge08[merge08['Anomaly']!='ok']
+merge11.to_csv("data/merge11.csv", index=False)
+merge08.to_csv("data/merge08.csv", index=False)
 # Drop the time columns since we won't use them anymore
 merge11 = merge11.drop(['Time Start (s)', 'Time End (s)'], axis=1)
 merge08 = merge08.drop(['Time Start (s)', 'Time End (s)'], axis=1)
-merge08=merge08[merge08['Anomaly']!='ok']
+
+
 
 # Concat the two dataset, creating the dataset for training the ML algorithm
 Training_Dataset = pd.concat([merge11, merge08], ignore_index=True)
