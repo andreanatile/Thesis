@@ -28,7 +28,7 @@ plt.ylabel('Amplitude (rad/s)')
 
 # Plot the Fourier Transform
 plt.subplot(2, 1, 2)
-plt.plot(frequencies, np.abs(fft_result_Gyr_z))
+plt.plot(frequencies,2* np.abs(fft_result_Gyr_z)/len(fft_result_Gyr_z))
 plt.title('Fourier Transform of Z-axis Gyroscope')
 plt.xlabel('Frequency (Hz)')
 plt.ylabel('Amplitude')
@@ -55,10 +55,10 @@ plt.ylabel('Amplitude (rad/s)')
 
 # Plot the Fourier Transform
 plt.subplot(2, 1, 2)
-plt.plot(frequencies, np.abs(fft_result_Gyr_x))
+plt.plot(frequencies, 2*np.abs(fft_result_Gyr_x)/len(fft_result_Gyr_x))
 plt.title('Fourier Transform of X-axis Gyroscope')
 plt.xlabel('Frequency (Hz)')
-plt.ylabel('Amplitude')
+plt.ylabel('Amplitude (rad/s)')
 plt.xlim(0, sampling_rate / 2)  # Display only positive frequencies
 plt.tight_layout()
 plt.savefig("plot/Gyroscope/fft_x_900rpm.png")

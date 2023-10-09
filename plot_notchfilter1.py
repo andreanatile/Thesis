@@ -49,12 +49,12 @@ for i, signal in enumerate(signals):
 
     # Plot FFT magnitude
     ax = axes[i // 3, i % 3]  # Adjusted indexing here
-    ax.plot(freq, np.abs(signals[i]))
+    ax.plot(freq, 2*np.abs(signals[i])/len(signals[i]))
     ax.set_title(titles[i])  # Use the defined titles
     ax.set_xlabel('Frequency (Hz)')
-    ax.set_ylabel('Magnitude')
+    ax.set_ylabel('Amplitude (m/s^2)')
     ax.set_xlim(0, sampling_rate / 2)
-    ax.set_ylim(0,160)
+    ax.set_ylim(0,0.44)
 
 # Adjust layout and display
 plt.tight_layout()

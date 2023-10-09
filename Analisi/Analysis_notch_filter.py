@@ -20,6 +20,8 @@ sampling_rate=400
 #calculate value of FFT and frequency
 Sacc900_noOffset=Sacc900['Acceleration y (m/s^2)']-np.mean(Sacc900['Acceleration y (m/s^2)'])
 fft_900=np.fft.fft(Sacc900_noOffset)
+
+
 freq_900=np.fft.fftfreq(len(Sacc900['Acceleration y (m/s^2)']),d=1/sampling_rate)
 
 
@@ -48,6 +50,7 @@ plt.show()
 #---------------------------Fourier trasform at 2000rpm--------------------------------
 Sacc2000_noOffset=Sacc2000['Acceleration y (m/s^2)']-np.mean(Sacc2000['Acceleration y (m/s^2)'])
 fft_2000=np.fft.fft(Sacc2000_noOffset)
+
 freq_2000=np.fft.fftfreq(len(Sacc2000['Acceleration y (m/s^2)']),d=1/sampling_rate)
 
 
@@ -76,6 +79,7 @@ plt.show()
 #-----------------------------FFT at 1500rpm----------------------------------------
 Sacc1500_noOffset=Sacc1500['Acceleration y (m/s^2)']-np.mean(Sacc1500['Acceleration y (m/s^2)'])
 fft_1500=np.fft.fft(Sacc1500_noOffset)
+
 freq_1500=np.fft.fftfreq(len(Sacc1500['Acceleration y (m/s^2)']),d=1/sampling_rate)
 # Plot the original signal (optional)
 plt.figure(figsize=(10, 6))
@@ -104,21 +108,21 @@ plt.show()
 plt.figure(figsize=(10,6))
 
 plt.subplot(3,1,1)
-plt.plot(freq_900,np.abs(fft_900))
+plt.plot(freq_900,2*np.abs(fft_900)/len(fft_900))
 plt.title('Fourier Transform of Acceleration y at 900rpm')
 plt.xlabel('Frequency (Hz)')
 plt.ylabel('Amplitude (m/s^2)')
 plt.xlim(0, sampling_rate / 2) 
 
 plt.subplot(3,1,2)
-plt.plot(freq_1500,np.abs(fft_1500))
+plt.plot(freq_1500,2*np.abs(fft_1500)/len(fft_1500))
 plt.title('Fourier Transform of Acceleration y at 1500rpm')
 plt.xlabel('Frequency (Hz)')
 plt.ylabel('Amplitude (m/s^2)')
 plt.xlim(0, sampling_rate / 2)
 
 plt.subplot(3,1,3)
-plt.plot(freq_2000,np.abs(fft_2000))
+plt.plot(freq_2000,2*np.abs(fft_2000)/len(fft_2000))
 plt.title('Fourier Transform of Acceleration y at 2000rpm')
 plt.xlabel('Frequency (Hz)')
 plt.ylabel('Amplitude (m/s^2)')
@@ -165,7 +169,7 @@ plt.ylabel('Amplitude (rad/s)')
 
 # Plot the Fourier Transform
 plt.subplot(2, 1, 2)
-plt.plot(freq_2000, np.abs(fft_2000))
+plt.plot(freq_2000, 2*np.abs(fft_2000)/len(fft_2000))
 plt.title('Fourier Transform of Gyroscope x at 2000rpm')
 plt.xlabel('Frequency (Hz)')
 plt.ylabel('Amplitude  (rad/s)')
@@ -174,3 +178,5 @@ plt.tight_layout()
 
 plt.savefig("plot/Gyroscope/fft_200rpm.png")
 plt.show()
+
+print(len(freq_2000))

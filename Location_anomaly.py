@@ -10,7 +10,7 @@ merge11=merge11[columns]
 
 Location08=pd.read_csv('data/2023-09-08/Location.csv')
 Location11=pd.read_csv('data/2023-09-08/Location.csv')
-
+print(merge08.head())
 merged=merge08.merge(Location08,left_on="Time Start (s)",right_on='Time (s)',how='inner')
 
 print(len(merged))
