@@ -49,17 +49,21 @@ plt.figure(figsize=(10, 6))
 # Plot the original signal 
 plt.subplot(2, 1, 1)
 plt.plot(data_Gyr['Time (s)'],data_Gyr["Gyroscope x (rad/s)"])
-plt.title('The original signal of the X-axis gyroscope reads at 900rpm with the engine running but the vehicle stationary')
+plt.title('The original signal of the X-axis gyroscope reads at 900rpm',fontsize=16)
 plt.xlabel('Time')
 plt.ylabel('Amplitude (rad/s)')
+plt.xticks(fontsize=12)  # Adjust the fontsize as needed
+plt.yticks(fontsize=12)
 
 # Plot the Fourier Transform
 plt.subplot(2, 1, 2)
 plt.plot(frequencies, 2*np.abs(fft_result_Gyr_x)/len(fft_result_Gyr_x))
-plt.title('Fourier Transform of X-axis Gyroscope')
+plt.title('Fourier Transform of X-axis Gyroscope at 900 rpm',fontsize=16)
 plt.xlabel('Frequency (Hz)')
 plt.ylabel('Amplitude (rad/s)')
-plt.xlim(0, sampling_rate / 2)  # Display only positive frequencies
+plt.xlim(0, sampling_rate / 2)
+plt.xticks(fontsize=12)  # Adjust the fontsize as needed
+plt.yticks(fontsize=12)  # Display only positive frequencies
 plt.tight_layout()
 plt.savefig("plot/Gyroscope/fft_x_900rpm.png")
 plt.show()

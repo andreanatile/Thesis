@@ -109,25 +109,31 @@ plt.figure(figsize=(10,6))
 
 plt.subplot(3,1,1)
 plt.plot(freq_900,2*np.abs(fft_900)/len(fft_900))
-plt.title('Fourier Transform of Acceleration y at 900rpm')
+plt.title('Fourier Transform of Acceleration y at 900rpm',fontsize=16)
 plt.xlabel('Frequency (Hz)')
 plt.ylabel('Amplitude (m/s^2)')
 plt.xlim(0, sampling_rate / 2) 
+plt.xticks(fontsize=12)  # Adjust the fontsize as needed
+plt.yticks(fontsize=12)
 
 plt.subplot(3,1,2)
 plt.plot(freq_1500,2*np.abs(fft_1500)/len(fft_1500))
-plt.title('Fourier Transform of Acceleration y at 1500rpm')
+plt.title('Fourier Transform of Acceleration y at 1500rpm',fontsize=16)
 plt.xlabel('Frequency (Hz)')
 plt.ylabel('Amplitude (m/s^2)')
 plt.xlim(0, sampling_rate / 2)
+plt.xticks(fontsize=12)  # Adjust the fontsize as needed
+plt.yticks(fontsize=12)
 
 plt.subplot(3,1,3)
 plt.plot(freq_2000,2*np.abs(fft_2000)/len(fft_2000))
-plt.title('Fourier Transform of Acceleration y at 2000rpm')
+plt.title('Fourier Transform of Acceleration y at 2000rpm',fontsize=16)
 plt.xlabel('Frequency (Hz)')
 plt.ylabel('Amplitude (m/s^2)')
 plt.xlim(0, sampling_rate / 2)
 plt.tight_layout()
+plt.xticks(fontsize=12)  # Adjust the fontsize as needed
+plt.yticks(fontsize=12)
 
 # Save and plot the graph
 plt.savefig("plot/Accelerometer/fft_900_vs_1500_vs_2000.png")
@@ -163,17 +169,21 @@ freq_2000=np.fft.fftfreq(len(Sgyr2000['Gyroscope x (rad/s)']),d=1/sampling_rate)
 plt.figure(figsize=(10, 6))
 plt.subplot(2, 1, 1)
 plt.plot(Sgyr2000['Time (s)'],Sgyr2000['Gyroscope x (rad/s)'])
-plt.title('Original Signal of Gyroscope x at 2000rpm')
+plt.title('Original Signal of Gyroscope x at 2000rpm',fontsize=16)
 plt.xlabel('Time')
 plt.ylabel('Amplitude (rad/s)')
+plt.xticks(fontsize=12)  # Adjust the fontsize as needed
+plt.yticks(fontsize=12)
 
 # Plot the Fourier Transform
 plt.subplot(2, 1, 2)
 plt.plot(freq_2000, 2*np.abs(fft_2000)/len(fft_2000))
-plt.title('Fourier Transform of Gyroscope x at 2000rpm')
+plt.title('Fourier Transform of Gyroscope x at 2000rpm',fontsize=16)
 plt.xlabel('Frequency (Hz)')
 plt.ylabel('Amplitude  (rad/s)')
 plt.xlim(0, sampling_rate / 2)  
+plt.xticks(fontsize=12)  # Adjust the fontsize as needed
+plt.yticks(fontsize=12)
 plt.tight_layout()
 
 plt.savefig("plot/Gyroscope/fft_200rpm.png")
