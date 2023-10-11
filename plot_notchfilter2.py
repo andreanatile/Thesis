@@ -55,7 +55,12 @@ for i, signal in enumerate(signals):
     ax.set_ylim(0,0.4)
     ax.xaxis.set_tick_params(labelsize=12)
     ax.yaxis.set_tick_params(labelsize=12)
+    # Add vertical lines for every 20 Hz interval
+    for frequency in range(0, int(sampling_rate / 2) + 1, 20):
+        ax.axvline(x=frequency, color='red', linestyle='--')
+        
 
 # Adjust layout and display
 plt.tight_layout()
+plt.savefig("plot/166 167 new.png")
 plt.show()

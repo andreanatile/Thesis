@@ -7,12 +7,12 @@ def notch_filter_segment(current_segmentFFT, previous_max_freq_index, pervious_m
 
     # Define parameters for the analysis
     band_size = 20  # Frequency band size in Hz
-    frequency_resolution = sampling_rate/len(current_segmentFFT)  # 0.4
+    frequency_resolution = sampling_rate/len(current_segmentFFT)  
 
     window_size = int(band_size*len(current_segmentFFT) /
-                      sampling_rate)  # Size of each analysis window 25
+                      sampling_rate)  
     # Step size for overlapping windows
-    step = int(window_size * (1 - overlap_percentage))  # 9
+    step = int(window_size * (1 - overlap_percentage))  
 
     # Initialize lists to store energy in each band
     energy_in_bands = []
