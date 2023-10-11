@@ -1,3 +1,23 @@
+Analisi
+    nella cartella analisi sono stati inseriti tutti i file utili alla analisi dei segnali.
+    per maggiori informazioni leggere il file readMe.txt della cartella.
+
+Data 
+    nella cartella Data sono stati salvati tutti i segnali misurati dall'applicazione PhyPhox.
+    per ogni misurazione è presente un file readMe.txt che descrive le condizioni sperimentali.
+
+plot 
+     nella cartella plot sono stati salvati tutti i grafici inseriti nella tesi.
+
+Tests
+     nella cartella Tests sono stati inseriti tutti i file per l'allenamento del rilevatore.
+     per maggiori informazioni consultare il readMe.txt della cartella.
+
+Training Data Extraction 
+    nella cartella Training Data Extraction sono contenuti i file per l'estrazione e il salvataggio in
+    file csv delle feauture utilizzate per l'allenamento del rilevatore.
+    per maggiori informazioni consultare il readMe.txt della cartella.
+
 features_extraction.py
     in questo file sono presenti tutte le funzioni utili all'estrazione delle feature.
         - features_extraction è una funzione che prendendo come input il segnale, la 
